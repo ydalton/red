@@ -1,6 +1,17 @@
 use std::io;
 use std::convert::TryFrom;
 
+const NAME: &str = "red";
+
+pub fn help() {
+    println!(
+            "Usage: {NAME} [options] [file]\n\
+            Options:\n\
+            \t-h, --help                  display this help and exit\n \
+            \t-h, --help                  display this help and exit\n
+            ");
+}
+
 pub fn edit(buffer: &mut Vec<String>) -> bool {
     let mut line = String::new();
     let mut in_loop = true;
@@ -24,11 +35,7 @@ pub fn edit(buffer: &mut Vec<String>) -> bool {
     changed
 }
 
-pub fn print_lines(
-    start_number: u32,
-    amount: u32,
-    buffer: &Vec<String>
-) {
+pub fn print_lines(start_number: u32, amount: u32, buffer: &Vec<String>) {
     if (start_number + amount) > buffer.len()
                                         .try_into()
                                         .unwrap() {
