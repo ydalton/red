@@ -1,5 +1,4 @@
 use std::io;
-use std::convert::TryFrom;
 
 const NAME: &str = "red";
 
@@ -35,15 +34,12 @@ pub fn edit(buffer: &mut Vec<String>) -> bool {
     changed
 }
 
-pub fn print_lines(start_number: u32, amount: u32, buffer: &Vec<String>) {
-    if (start_number + amount) > buffer.len()
-                                        .try_into()
-                                        .unwrap() {
+pub fn print_lines(start_number: usize, amount: usize, buffer: &Vec<String>) {
+    if (start_number + amount) > buffer.len() {
         panic!("Too large!");
     }
 
     for n in start_number..(start_number+amount) {
-        let n_us = usize::try_from(n).unwrap();
-        println!("{}", &buffer[n_us]);
+        println!("{}", &buffer[n]);
     }
 }

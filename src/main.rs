@@ -35,9 +35,10 @@ fn main() {
 
         // remove the new line character at the end
         command.pop();
+        parse::parse_command(&command);
         if command == "q" {
-            if buffer.is_empty() 
-                | tried_to_exit 
+            if buffer.is_empty()
+                | tried_to_exit
                 | !modified {
                 running = false;
             } else {
