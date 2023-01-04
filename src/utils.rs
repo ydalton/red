@@ -30,16 +30,27 @@ pub fn edit(buffer: &mut Vec<String>) -> bool {
         }
         line = "".to_string();
     }
-
     changed
 }
 
-pub fn print_lines(start_number: usize, amount: usize, buffer: &Vec<String>) {
-    if (start_number + amount) > buffer.len() {
-        panic!("Too large!");
+pub fn print_lines(start_number: usize,
+                   amount: usize,
+                   buffer: &Vec<String>) -> bool {
+    let end_number = {
+        if amount == 0 {
+            buffer.len()
+        } else {
+            start_number + amount - 1
+        }
+    };
+
+    if (start_number > buffer.len() + 1)
+        | (end_number > buffer.len()) {
+        return false;
     }
 
-    for n in start_number..(start_number+amount) {
+    for n in (start_number - 1)..end_number {
         println!("{}", &buffer[n]);
     }
+    return true;
 }

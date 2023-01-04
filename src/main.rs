@@ -52,12 +52,11 @@ fn main() {
                     modified = utils::edit(&mut buffer);
                 },
                 parse::InstructionType::Print => {
-                    if buffer.is_empty() {
+                    if buffer.is_empty()
+                    | !utils::print_lines(cmd.start,
+                                          cmd.amount,
+                                          &buffer) {
                         println!("?");
-                    } else {
-                    utils::print_lines(buffer.len() - 1,
-                                        1,
-                                        &buffer)
                     }
                 }
                 parse::InstructionType::Write => {

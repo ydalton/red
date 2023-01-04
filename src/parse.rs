@@ -53,19 +53,53 @@ pub fn parse_command(cmd: &String) -> Command {
             tempstring.push(letter);
         }
     }
+
     let mut start: usize = 0;
     let mut amount: usize = 0;
+
     if first_part != "" {
         let ranges: Vec<&str> = first_part.split(",").collect();
-        start = ranges[0].parse::<usize>().unwrap();
-        let end = ranges[1].parse::<usize>().unwrap();
-        if start < end {
-            amount = end - start;
+        dbg!(&ranges);
+        start = {
+            if ranges[0] != "" {
+                ranges[0].parse::<usize>().unwrap()
+            } else {
+                1
+            }
+        };
+
+        let end: usize = {
+            if ranges.len() < 2 {
+                start
+            } else {
+                if ranges[1] != "" {
+                    ranges[1].parse::<usize>().unwrap()
+                } else {
+                    0
+                }
+            }
+        };
+        // dbg!(end);
+
+        amount = {
+            if start < end {
+                end - start + 1
+            } else if start == end {
+                1
+            } else {
+                0
+            }
         }
     }
-    if instr == InstructionType::Append {
+
+    // dbg!(start);
+    // dbg!(amount);
+
+    if (instr == InstructionType::Append)
+    | (instr == InstructionType::Quit) {
         tempstring = "".to_string();
     }
+
     let parsed_instruction = Command {
         instruction: instr,
         start: start,
