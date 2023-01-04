@@ -22,7 +22,7 @@ pub fn edit(buffer: &mut Vec<String>) -> bool {
             .expect("Failed!");
         // get rid of the newline character
         line.pop();
-        if line.eq(".") {
+        if line == ".".to_string() {
             in_loop = false;
         } else {
             let _ = &buffer.push(line);

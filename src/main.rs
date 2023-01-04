@@ -35,8 +35,8 @@ fn main() {
 
         // remove the new line character at the end
         command.pop();
-        parse::parse_command(&command);
-        if command == "q" {
+        let cmd = parse::parse_command(&command);
+        if cmd.instruction == parse::InstructionType::Quit {
             if buffer.is_empty()
                 | tried_to_exit
                 | !modified {
@@ -47,36 +47,33 @@ fn main() {
             }
         } else {
             tried_to_exit = false;
-            match command.as_str() {
-                // append to buffer
-                "a" => modified = utils::edit(&mut buffer),
-                // print lines
-                "p" => {
+            match cmd.instruction {
+                parse::InstructionType::Append => {
+                    modified = utils::edit(&mut buffer);
+                },
+                parse::InstructionType::Print => {
                     if buffer.is_empty() {
                         println!("?");
                     } else {
-                    utils::print_lines((buffer.len() - 1)
-                                        .try_into()
-                                        .unwrap(),
+                    utils::print_lines(buffer.len() - 1,
                                         1,
                                         &buffer)
                     }
-                },
-                // write to file
-                "w" => {
-                    if buffer.is_empty() {
+                }
+                parse::InstructionType::Write => {
+                    if buffer.is_empty()
+                    | (cmd.operand == "".to_string()) {
                         println!("?");
                     } else {
                         modified = false;
-                        let num_bytes = io::write_to_file("test", &buffer);
+                        let num_bytes = io::write_to_file(cmd.operand.as_str(), &buffer);
                         // print number of bytes saved.
                         println!("{num_bytes}");
                     }
                 }
-                "!" => {
-                    process::Command::new("sh -c");
-                }
-                _ => println!("?"),
+                parse::InstructionType::None => println!("?"),
+                parse::InstructionType::Quit => {
+                },
             }
         }
         // clear string
